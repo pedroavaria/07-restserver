@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { check } from 'express-validator'
 import {
     usuariosDelete,
     usuariosGet,
@@ -12,7 +13,9 @@ router.get('/', usuariosGet)
 
 router.put('/:id', usuariosPut)
 
-router.post('/', usuariosPost)
+router.post('/',[
+    check('correo','El correo no es valido').isEmail()
+], usuariosPost)
 
 router.delete('/', usuariosDelete)
 
