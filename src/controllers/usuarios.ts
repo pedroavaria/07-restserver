@@ -6,10 +6,17 @@ const usuariosGet = async(req = request, res = response) => {
     let  { limite = 5 , desde = 0} = req.query
     limite = isNaN(Number(limite)) ? 5 : Number(limite)
     desde = isNaN(Number(desde)) ? 0 : Number(desde)
-    const usuarios = await Usuario.find()
+    const query = {estado: true}
+    const [total, usuarios] = await Promise.all([
+        Usuario.countDocuments(query),
+        Usuario.find(query)
         .skip(desde)
         .limit(limite)
-    res.json(usuarios)
+    ])
+    res.json({
+        total,
+        usuarios
+    })
    
 }
 const usuariosPost = async (req = request, res = response) => {
@@ -39,10 +46,13 @@ const usuariosPut = async (req = request, res = response) => {
         usuario
     })
 }
-const usuariosDelete = (req = request, res = response) => {
-
+const usuariosDelete = async (req = request, res = response) => {
+    const {id} = req.params
+    // Fisicamente lo borramos
+    // const usuario = await Usuario.findByIdAndDelete(id)
+    const usuario = await Usuario.findByIdAndUpdate(id,{estado: false})
     res.json({
-        msg: 'delete API - controlador'
+        usuario
     })
 }
 const usuariosPatch = (req = request, res = response) => {
