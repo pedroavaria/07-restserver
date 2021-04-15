@@ -1,18 +1,18 @@
-import {Schema,model} from 'mongoose'
+import { Schema, model } from 'mongoose'
 
 const UsuarioSchema = new Schema({
     nombre: {
         type: String,
-        required: [true,'El nombre es obligatorio'],
+        required: [true, 'El nombre es obligatorio'],
     },
     correo: {
         type: String,
-        required: [true,'El correo es obligatorio'],
+        required: [true, 'El correo es obligatorio'],
         unique: true
     },
     password: {
         type: String,
-        required: [true,'La contraseña es obligatoria'],
+        required: [true, 'La contraseña es obligatoria'],
     },
     img: {
         type: String,
@@ -20,7 +20,7 @@ const UsuarioSchema = new Schema({
     rol: {
         type: String,
         required: true,
-        enum: ['ADMIN_ROLE','USER_ROLE']
+        enum: ['ADMIN_ROLE', 'USER_ROLE']
     },
     estado: {
         type: Boolean,
@@ -32,11 +32,11 @@ const UsuarioSchema = new Schema({
     }
 })
 
-UsuarioSchema.methods.toJSON = function() {
-    const data:any = this.toObject()
-    const { __v,password, _id, ...usuario } = data
+UsuarioSchema.methods.toJSON = function () {
+    const data: any = this.toObject()
+    const { __v, password, _id, ...usuario } = data
     usuario.uid = _id
     return usuario
 }
-
-export default model('Usuario',UsuarioSchema)
+const Usuario = model('Usuario', UsuarioSchema)
+export { Usuario }

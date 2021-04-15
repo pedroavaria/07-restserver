@@ -1,5 +1,4 @@
-import Role from '../models/role'
-import Usuario from '../models/usuario'
+import { Role, Usuario } from '../models'
 
 const esRoleValido = async (rol = '') => {
     const existeRol = await Role.findOne({ rol })
@@ -8,18 +7,18 @@ const esRoleValido = async (rol = '') => {
     }
 }
 
-const emailExiste =  async(correo = '') => {
-    const existeEmail = await Usuario.findOne({correo})
+const emailExiste = async (correo = '') => {
+    const existeEmail = await Usuario.findOne({ correo })
     if (existeEmail) {
         throw new Error(`El correo ${correo} ya existe`)
     }
 }
 
-const usuarioExiste =  async(id = '') => {
+const usuarioExiste = async (id = '') => {
     const existeUsuario = await Usuario.findById(id)
     if (!existeUsuario) {
         throw new Error(`El usuario con el id ${id} no existe`)
     }
 }
 
-export { esRoleValido ,emailExiste, usuarioExiste}
+export { esRoleValido, emailExiste, usuarioExiste }

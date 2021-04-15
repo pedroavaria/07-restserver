@@ -1,6 +1,6 @@
 import { request, response } from 'express'
 import bcryptjs from 'bcryptjs'
-import Usuario from '../models/usuario'
+import { Usuario } from '../models'
 import { generarJWT } from '../helpers/generarJWT'
 
 const login = async (req = request, res = response) => {
@@ -8,7 +8,7 @@ const login = async (req = request, res = response) => {
     try {
 
         // Verificar si el email existe y si el usuario existe
-        const usuario:any = await Usuario.findOne({ correo })
+        const usuario: any = await Usuario.findOne({ correo })
         if (!usuario || !usuario.estado) {
             return res.status(400).json({
                 msg: 'Usuario / Password no son correctos - correo'
@@ -16,7 +16,7 @@ const login = async (req = request, res = response) => {
         }
 
         // Verificar la contraseña
-        const validaPassword = bcryptjs.compareSync(password,usuario.password)
+        const validaPassword = bcryptjs.compareSync(password, usuario.password)
         if (!validaPassword) {
             return res.status(400).json({
                 msg: 'Usuario / Password no son correctos - password'

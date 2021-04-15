@@ -2,17 +2,20 @@ import express from 'express'
 import cors from 'cors'
 import { router as UsuarioRoute } from '../routes/usuarios';
 import { router as AuthRouter } from '../routes/auth';
+import { router as CategoriaRouter } from '../routes/categorias'
 import { dbConnection } from '../database/config';
 class Server {
     app: any;
-    port:any
-    usuariosPath: string;
-    authPatch: string;
+    port: any
+    paths: any;
     constructor() {
         this.app = express();
         this.port = process.env.PORT;
-        this.usuariosPath = '/api/usuarios'
-        this.authPatch = '/api/auth'
+        this.paths = {
+            auth:       '/api/usuarios',
+            categorias: '/api/categorias',
+            usuarios:   '/api/usuarios'
+        }
         // Conexión a base de datos
         this.conectarDB()
         // Middlewares
@@ -35,15 +38,16 @@ class Server {
     }
 
     routes() {
-        this.app.use(this.usuariosPath,UsuarioRoute)
-        this.app.use(this.authPatch,AuthRouter)
+        this.app.use(this.paths.usuarios, UsuarioRoute)
+        this.app.use(this.paths.categorias, CategoriaRouter)
+        this.app.use(this.paths.auth, AuthRouter)
     }
 
     listen() {
-        this.app.listen(this.port,() => {
-        console.log(`Escuchando en el puerto http://localhost:${this.port}`);
+        this.app.listen(this.port, () => {
+            console.log(`Escuchando en el puerto http://localhost:${this.port}`);
         })
     }
 }
 
-export {Server}
+export { Server }

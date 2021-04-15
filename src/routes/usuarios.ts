@@ -8,18 +8,17 @@ import {
     usuariosPut
 } from '../controllers/usuarios'
 import { emailExiste, esRoleValido, usuarioExiste } from '../helpers/db-validators'
-import { validarCampos } from '../middlewares/validar-campos'
-import { validarJWT } from '../middlewares/validar-jwt'
+import { validarCampos, validarJWT } from '../middlewares'
 const router = Router()
 
 router.get('/', usuariosGet)
 
-router.put('/:id',[
-    check('id','No es un id valido').isMongoId(),
+router.put('/:id', [
+    check('id', 'No es un id valido').isMongoId(),
     check('id').custom(usuarioExiste),
     check('rol').custom(esRoleValido),
     validarCampos
-] ,usuariosPut)
+], usuariosPut)
 
 router.post('/', [
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
@@ -31,9 +30,9 @@ router.post('/', [
     validarCampos
 ], usuariosPost)
 
-router.delete('/:id',[
+router.delete('/:id', [
     validarJWT,
-    check('id','No es un id valido').isMongoId(),
+    check('id', 'No es un id valido').isMongoId(),
     check('id').custom(usuarioExiste),
     validarCampos
 ], usuariosDelete)
