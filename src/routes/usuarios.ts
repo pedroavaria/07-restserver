@@ -9,6 +9,7 @@ import {
 } from '../controllers/usuarios'
 import { emailExiste, esRoleValido, usuarioExiste } from '../helpers/db-validators'
 import { validarCampos } from '../middlewares/validar-campos'
+import { validarJWT } from '../middlewares/validar-jwt'
 const router = Router()
 
 router.get('/', usuariosGet)
@@ -31,6 +32,7 @@ router.post('/', [
 ], usuariosPost)
 
 router.delete('/:id',[
+    validarJWT,
     check('id','No es un id valido').isMongoId(),
     check('id').custom(usuarioExiste),
     validarCampos
