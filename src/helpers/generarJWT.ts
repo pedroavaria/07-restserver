@@ -2,12 +2,12 @@ import jwt from "jsonwebtoken"
 
 
 const generarJWT = (uid = '') => {
-    return new Promise((resolve,reject) => {
-        const payload:any = {uid}
-        const secret:any = process.env.SECRETPRIVATEKEY
-        jwt.sign(payload,secret, {
+    return new Promise((resolve, reject) => {
+        const payload: any = { uid }
+        const secret: any = process.env.SECRETPRIVATEKEY
+        jwt.sign(payload, secret, {
             expiresIn: '4h'
-        }, (err,token) => {
+        }, (err, token) => {
             if (err) {
                 console.log(err);
                 reject('No se pudo generar el token')
@@ -18,4 +18,4 @@ const generarJWT = (uid = '') => {
     })
 }
 
-export {generarJWT}
+export { generarJWT }

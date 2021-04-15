@@ -1,6 +1,7 @@
 import { request, response } from 'express'
 import bcryptjs from 'bcryptjs'
 import Usuario from '../models/usuario'
+import { AnyAaaaRecord } from 'node:dns'
 
 const usuariosGet = async(req = request, res = response) => {
     let  { limite = 5 , desde = 0} = req.query
@@ -46,10 +47,8 @@ const usuariosPut = async (req = request, res = response) => {
         usuario
     })
 }
-const usuariosDelete = async (req = request, res = response) => {
+const usuariosDelete = async (req:any = request, res = response) => {
     const {id} = req.params
-    // Fisicamente lo borramos
-    // const usuario = await Usuario.findByIdAndDelete(id)
     const usuario = await Usuario.findByIdAndUpdate(id,{estado: false})
     res.json({
         usuario
