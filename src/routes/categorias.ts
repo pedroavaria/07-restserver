@@ -9,11 +9,15 @@ const router = Router()
 
 router.get('/', categoriasGet)
 
-router.get('/:id', categoriasGet)
+router.get('/:id',[
+    check('id','No es un id valido').isMongoId(),
+    validarCampos
+], categoriasGet)
 
 // SOLO TOKEN VALIDO
 router.post('/', [
     validarJWT,
+    check('nombre','El nombre es obligatorio').not().isEmpty(),
     validarCampos
 ], categoriasPost)
 

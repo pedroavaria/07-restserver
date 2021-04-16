@@ -12,7 +12,7 @@ class Server {
         this.app = express();
         this.port = process.env.PORT;
         this.paths = {
-            auth:       '/api/usuarios',
+            auth:       '/api/auth',
             categorias: '/api/categorias',
             usuarios:   '/api/usuarios'
         }
