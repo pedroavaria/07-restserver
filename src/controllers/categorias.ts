@@ -1,27 +1,18 @@
 import { request, response } from 'express'
 import { Categoria } from '../models'
 
-const categoriasGet = async (req: any = request, res = response) => {
+const obtenerCategorias = async (req: any = request, res = response) => {
     const { id } = req.params
     const { limite = 5, desde = 0 } = req.query
     const query = { estado: true }
-    // const query = (id) ? {_id:id} : {}
     try {
-        const total = await Categoria.estimatedDocumentCount()
-        if (id) {
-            // buscar por id
-            const categoria = await Categoria.findById(id)
-                .populate('usuario','nombre')
-
-            return res.json({
-                total,
-                categoria
-            })
-        }
-        const categorias = await Categoria.find(query)
-            .populate('usuario')
-            .skip(Number(desde))
-            .limit(Number(limite))
+        const [total, categorias] = await Promise.all([
+            Categoria.countDocuments(query),
+            await Categoria.find(query)
+                .populate('usuario', 'nombre')
+                .skip(Number(desde))
+                .limit(Number(limite))
+        ])
 
         res.json({
             total,
@@ -29,14 +20,28 @@ const categoriasGet = async (req: any = request, res = response) => {
         })
     } catch (error) {
         console.log(error);
-
         res.status(500).json({
             msg: 'Favor comunicarse con el administrador'
         })
-
     }
-
 }
+
+const obtenerCategoria = async (req: any = request, res = response) => {
+    const { id } = req.params
+    try {
+        const categoria = await Categoria.findById(id)
+            .populate('usuario', 'nombre')
+        res.json({
+            categoria
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: 'Contactar con un administrador'
+        })
+    }
+}
+
 
 const categoriasPost = async (req: any = request, res = response) => {
 
@@ -58,22 +63,44 @@ const categoriasPost = async (req: any = request, res = response) => {
     const categoria = new Categoria(data)
     const nuevaCategoria = await categoria.save()
 
-
     res.status(201).json({
         nuevaCategoria
     })
 }
 
-const categoriasPut = (req: any = request, res = response) => {
-    res.json({
-        msg: "Todo bien - Put"
-    })
+const actualizarCategoria = async (req: any = request, res = response) => {
+    const { id } = req.params
+    const nombre = req.body.nombre.toUpperCase()
+    const usuario = req.usuario._id
+    try {
+        const categoria = await Categoria.findByIdAndUpdate(id, { nombre,usuario }, { new: true })
+            .populate('usuario', 'nombre')
+        res.json({
+            categoria
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: 'Comunicarse con el administrador'
+        })
+
+    }
 }
 
-const categoriasDelete = (req: any = request, res = response) => {
-    res.json({
-        msg: "Todo bien - Delete"
-    })
+const categoriasDelete = async (req: any = request, res = response) => {
+    const { id } = req.params
+    try {
+        const categoria = await Categoria.findByIdAndUpdate(id, { estado: false }, { new: true })
+            .populate('usuario', 'nombre')
+        res.json({
+            categoria
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: 'Contactar con el administrador'
+        })
+    }
 }
 
-export { categoriasGet, categoriasPost, categoriasPut, categoriasDelete }
+export { obtenerCategorias, categoriasPost, actualizarCategoria, categoriasDelete, obtenerCategoria }

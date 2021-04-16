@@ -1,18 +1,20 @@
 import { Router } from 'express'
 import { check } from 'express-validator'
-import { categoriasGet, categoriasPost, categoriasDelete, categoriasPut } from '../controllers/categorias'
-import { validarJWT, validarCampos } from '../middlewares'
+import { obtenerCategoria,obtenerCategorias, categoriasPost, categoriasDelete, actualizarCategoria } from '../controllers/categorias'
+import { categoriaExiste } from '../helpers/db-validators'
+import { validarJWT, validarCampos, esAdminRole } from '../middlewares'
 
 
 const router = Router()
 
 
-router.get('/', categoriasGet)
+router.get('/', obtenerCategorias)
 
 router.get('/:id',[
     check('id','No es un id valido').isMongoId(),
+    check('id').custom(categoriaExiste),
     validarCampos
-], categoriasGet)
+], obtenerCategoria)
 
 // SOLO TOKEN VALIDO
 router.post('/', [
@@ -22,10 +24,22 @@ router.post('/', [
 ], categoriasPost)
 
 // SOLO TOKEN VALIDO
-router.put('/:id', categoriasPut)
+router.put('/:id', [
+    validarJWT,
+    check('id',"No es un id valido").isMongoId(),
+    check('id').custom(categoriaExiste),
+    check('nombre','El nombre es obligatorio').not().isEmpty(),
+    validarCampos
+], actualizarCategoria)
 
 // SOLO TOKEN VALIDO
-router.delete('/:id', categoriasDelete)
+router.delete('/:id',[
+    validarJWT,
+    esAdminRole,
+    check('id','No es un id valido').isMongoId(),
+    check('id').custom(categoriaExiste),
+    validarCampos
+], categoriasDelete)
 
 
 export { router }
