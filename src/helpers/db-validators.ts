@@ -1,4 +1,4 @@
-import { Categoria, Role, Usuario } from '../models'
+import { Categoria, Producto, Role, Usuario } from '../models'
 
 const esRoleValido = async (rol = '') => {
     const existeRol = await Role.findOne({ rol })
@@ -32,4 +32,15 @@ const categoriaExiste = async(id = '') => {
     }
 }
 
-export { esRoleValido, emailExiste, usuarioExiste, categoriaExiste }
+const productoExiste = async(id = '') => {
+    try {
+        const existeProducto = await Producto.findById(id)
+        if (!existeProducto) {
+            throw new Error(`El producto con el id ${id} no existe`)
+        }        
+    } catch (error) {
+        throw new Error(`El producto con el id ${id} no existe`)
+    }
+}
+
+export { esRoleValido, emailExiste, usuarioExiste, categoriaExiste, productoExiste }

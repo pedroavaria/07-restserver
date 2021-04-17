@@ -3,6 +3,8 @@ import cors from 'cors'
 import { router as UsuarioRoute } from '../routes/usuarios';
 import { router as AuthRouter } from '../routes/auth';
 import { router as CategoriaRouter } from '../routes/categorias'
+import { router as ProductoRouter } from '../routes/productos'
+import { router as BuscarRouter } from '../routes/buscar'
 import { dbConnection } from '../database/config';
 class Server {
     app: any;
@@ -14,7 +16,9 @@ class Server {
         this.paths = {
             auth:       '/api/auth',
             categorias: '/api/categorias',
-            usuarios:   '/api/usuarios'
+            usuarios:   '/api/usuarios',
+            productos:  '/api/productos',
+            buscar:     '/api/buscar'
         }
         // Conexión a base de datos
         this.conectarDB()
@@ -41,6 +45,8 @@ class Server {
         this.app.use(this.paths.usuarios, UsuarioRoute)
         this.app.use(this.paths.categorias, CategoriaRouter)
         this.app.use(this.paths.auth, AuthRouter)
+        this.app.use(this.paths.productos, ProductoRouter)
+        this.app.use(this.paths.buscar, BuscarRouter)
     }
 
     listen() {
