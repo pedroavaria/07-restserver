@@ -1,10 +1,12 @@
 import express from 'express'
 import cors from 'cors'
+import fileUpload from 'express-fileupload';
 import { router as UsuarioRoute } from '../routes/usuarios';
 import { router as AuthRouter } from '../routes/auth';
 import { router as CategoriaRouter } from '../routes/categorias'
 import { router as ProductoRouter } from '../routes/productos'
 import { router as BuscarRouter } from '../routes/buscar'
+import { router as UploadsRouter } from '../routes/uploads'
 import { dbConnection } from '../database/config';
 class Server {
     app: any;
@@ -14,11 +16,12 @@ class Server {
         this.app = express();
         this.port = process.env.PORT;
         this.paths = {
-            auth:       '/api/auth',
+            auth: '/api/auth',
             categorias: '/api/categorias',
-            usuarios:   '/api/usuarios',
-            productos:  '/api/productos',
-            buscar:     '/api/buscar'
+            usuarios: '/api/usuarios',
+            productos: '/api/productos',
+            buscar: '/api/buscar',
+            uploads: '/api/uploads'
         }
         // Conexión a base de datos
         this.conectarDB()
@@ -39,6 +42,13 @@ class Server {
         this.app.use(express.json())
         // Directorio publico
         this.app.use(express.static('public'))
+
+        // Note that this option available for versions 1.0.0 and newer. 
+        this.app.use(fileUpload({
+            useTempFiles: true,
+            tempFileDir: '/tmp/',
+            createParentPath: true
+        }));
     }
 
     routes() {
@@ -47,6 +57,7 @@ class Server {
         this.app.use(this.paths.auth, AuthRouter)
         this.app.use(this.paths.productos, ProductoRouter)
         this.app.use(this.paths.buscar, BuscarRouter)
+        this.app.use(this.paths.uploads, UploadsRouter)
     }
 
     listen() {
