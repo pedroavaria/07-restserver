@@ -48,4 +48,4 @@ router.patch('/', usuariosPatch)
 
 
 
-export { router }
+export default router

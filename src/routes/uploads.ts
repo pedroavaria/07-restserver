@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { actualizarImagen, cargarArchivo, mostrarImagenes } from '../controllers/upload';
+import { cargarArchivo, mostrarImagenes, actualizarImagenCloudinary } from '../controllers/upload';
 import { check } from 'express-validator';
 import { validarArchivo, validarCampos } from '../middlewares';
 import { coleccionesPermitidas } from '../helpers';
@@ -12,7 +12,7 @@ router.put('/:coleccion/:id',[
     check('id','El id no es valido').isMongoId(),
     check('coleccion').custom(c => coleccionesPermitidas(c,['usuarios','productos'])),
     validarCampos
-],actualizarImagen)
+],actualizarImagenCloudinary)
 
 router.get('/:coleccion/:id', [
     check('id','EL id no es valido').isMongoId(),
@@ -20,4 +20,4 @@ router.get('/:coleccion/:id', [
     validarCampos
 ],mostrarImagenes)
 
-export { router }
+export default router

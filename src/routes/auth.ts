@@ -11,4 +11,4 @@ router.post('/login', [
     validarCampos
 ], login)
 
-export { router }
+export default router

@@ -44,4 +44,4 @@ router.delete('/:id',[
     validarCampos
 ],borrarProducto)
 
-export { router }
+export default router

@@ -42,4 +42,4 @@ router.delete('/:id',[
 ], categoriasDelete)
 
 
-export { router }
+export default router

@@ -1,12 +1,12 @@
 import express from 'express'
 import cors from 'cors'
 import fileUpload from 'express-fileupload';
-import { router as UsuarioRoute } from '../routes/usuarios';
-import { router as AuthRouter } from '../routes/auth';
-import { router as CategoriaRouter } from '../routes/categorias'
-import { router as ProductoRouter } from '../routes/productos'
-import { router as BuscarRouter } from '../routes/buscar'
-import { router as UploadsRouter } from '../routes/uploads'
+import UsuarioRoute from '../routes/usuarios';
+import AuthRouter from '../routes/auth';
+import CategoriaRouter from '../routes/categorias'
+import ProductoRouter from '../routes/productos'
+import BuscarRouter from '../routes/buscar'
+import UploadsRouter from '../routes/uploads'
 import { dbConnection } from '../database/config';
 class Server {
     app: any;

@@ -5,4 +5,4 @@ const router = Router()
 
 router.get('/:coleccion/:termino', buscar)
 
-export { router }
+export default router
